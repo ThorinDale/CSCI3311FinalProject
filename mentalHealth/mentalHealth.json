@@ -1,10 +1,88 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "data": {"url": "https://raw.githubusercontent.com/ThorinDale/CSCI3311FinalProject/master/mentalHealth/mentalHealth2.csv"},
-    "width": 700,
-    "mark": "bar",
-    "encoding": {
-        "x": {"field": "prior_signs?", "type": "nominal"},
-        "y": {"field": "prior_signs_count", "type": "quantitative"}
-    }
-}
+    "data": {
+      "url": "https://raw.githubusercontent.com/laurapavlosky/FinalProjectData/main/Mass-Shootings-Edited.csv"
+    },
+    "transform": [
+      {
+        "filter": {
+          "field": "prior_signs_mental_health_issues",
+          "oneOf": ["Yes", "No", "Unclear/Unknown/TBD"]
+        }
+      }
+    ],
+    "hconcat": [
+      {
+        "width": "300",
+        "height": 250,
+        "selection": {
+          "highlight": {"type": "single", "empty": "none", "on": "mouseover"},
+          "select": {"type": "single", "encodings": ["x"]}
+        },
+        "mark": {"type": "bar", "cursor": "pointer", "stroke": "black"},
+        "encoding": {
+          "x": {
+            "field": "prior_signs_mental_health_issues",
+            "title": "Prior Signs of Mental Disorder",
+            "axis": {"labelAngle": 0}
+          },
+          "y": {"aggregate": "count", "title": "Number of Incidents"},
+          "fillOpacity": {
+            "condition": {"selection": "select", "value": 1},
+            "value": 0.3
+          },
+          "strokeWidth": {
+            "condition": [
+              {
+                "test": {
+                  "and": [
+                    {"selection": "select"},
+                    "length(data(\"select_store\"))"
+                  ]
+                },
+                "value": 2
+              },
+              {"selection": "highlight", "value": 1}
+            ],
+            "value": 0
+          }
+        }
+      },
+      {
+        "layer": [
+          {
+            "data": {
+              "url": "https://raw.githubusercontent.com/vega/vega/master/docs/data/us-10m.json",
+              "format": {"type": "topojson", "feature": "states"}
+            },
+            "projection": {"type": "albersUsa"},
+            "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+          },
+          {
+            "projection": {"type": "albersUsa"},
+            "selection": {"click": {"type": "single"}},
+            "transform": [{"filter": {"selection": "select"}}],
+            "width": 500,
+            "height": 300,
+            "mark": "circle",
+            "encoding": {
+              "longitude": {"field": "longitude", "type": "quantitative"},
+              "latitude": {"field": "latitude", "type": "quantitative"},
+              "color": {"condition": {"selection": "click"}, "value": "grey"},
+              "fillOpacity": {
+                "condition": {"selection": "select", "value": 1},
+                "value": 0.1
+              },
+              "size": {
+                "field": "total_victims",
+                "legend": null,
+                "scale": {"rangeMin": 20}
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "config": {}
+  }
+  
