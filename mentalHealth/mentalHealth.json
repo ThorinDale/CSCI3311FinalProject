@@ -13,8 +13,8 @@
     ],
     "hconcat": [
       {
-        "width": "300",
-        "height": 250,
+        "width": "500",
+        "height": 500,
         "selection": {
           "highlight": {"type": "single", "empty": "none", "on": "mouseover"},
           "select": {"type": "single", "encodings": ["x"]}
@@ -62,8 +62,8 @@
             "projection": {"type": "albersUsa"},
             "selection": {"click": {"type": "single"}},
             "transform": [{"filter": {"selection": "select"}}],
-            "width": 500,
-            "height": 300,
+            "width": 700,
+            "height": 500,
             "mark": "circle",
             "encoding": {
               "longitude": {"field": "longitude", "type": "quantitative"},
