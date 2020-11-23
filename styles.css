@@ -34,6 +34,15 @@
     background-size: cover;
 }
 
+.parallax4 {
+    background-image: url("./assets/push back.jpg");
+    height: 500px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 
 h3 {
     margin-top: 20px;
