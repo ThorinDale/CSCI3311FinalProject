@@ -77,7 +77,8 @@
                 "field": "total_victims",
                 "legend": null,
                 "scale": {"rangeMin": 20}
-              }
+              },
+                "tooltip": {"field": "mental_health_details", "type": "nominal"}
             }
           }
         ]
