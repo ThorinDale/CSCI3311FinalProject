@@ -1,0 +1,10 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {"url": "https://raw.githubusercontent.com/ThorinDale/CSCI3311FinalProject/master/mentalHealth/mentalHealth2.csv"},
+    "width": 700,
+    "mark": "bar",
+    "encoding": {
+        "x": {"field": "prior_signs?", "type": "nominal"},
+        "y": {"field": "prior_signs_count", "type": "quantitative"}
+    }
+}
