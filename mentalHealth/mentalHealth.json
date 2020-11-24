@@ -66,7 +66,7 @@
       "layer": [
         {
           "data": {
-            "url": "data/us-10m.json",
+            "url": "https://raw.githubusercontent.com/vega/vega/master/docs/data/us-10m.json",
             "format": {"type": "topojson", "feature": "states"}
           },
           "projection": {"type": "albersUsa"},
