@@ -21,7 +21,10 @@ export function FirearmLaws(container) {
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     
     svg1.append('text')
-        .text("Firearm Laws Graphs will be here");
+        .text("Number of Gun Laws by State over Time")
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('class', 'display-4');
 
     Promise.all([
         d3.json('./firearmLaws/states-10m.json'),
@@ -51,28 +54,42 @@ export function FirearmLaws(container) {
             .style('stroke', '#333')
             .style('stroke-width', 0.5);
         
+        const tooltip = svg1.append('text')
+        tooltip.attr('class', 'stateLabel');
+        
         d3.selectAll('.state')
+            .on('mouseover', function(event, d) {
+                d3.select(d.path)
+                    .attr('fill', '##3393FF');
+                let stateLabel = d.properties.name;
+                d3.select('.stateLabel')
+                    .attr('x', 100)
+                    .attr('y', 200)
+                    .text(stateLabel);
+            })
             .on('click', function(d, i) {
-                update(laws, i.properties.name);
+                let state = i.properties.name;
+                let filteredLaws = laws.filter(law => law.state == state);
+                update(filteredLaws);
             });
     })
 
-    function update(laws, state) {
+    function update(laws) {
 
         svg2.selectAll('*').remove();
 
-        let filtered = laws.filter(law => law.state == state);
-        console.log(filtered);
+        // let filtered = laws.filter(law => law.state == state);
+        // console.log(filtered);
         let xScale = d3.scaleTime()
-            .domain(d3.extent(filtered, function(d){ return d.year }))
+            .domain(d3.extent(laws, function(d){ return d.year }))
             .range([0, width]);
         svg2.append('g')
             .attr('class', 'x-axis')
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(xScale).tickFormat(d3.format('d')));
+            .call(d3.axisBottom(xScale).ticks(laws.length).tickFormat(d3.format('d')));
         
         let yScale = d3.scaleLinear()
-            .domain([0, d3.max(filtered, function(d){ return d.lawtotal })])
+            .domain([0, d3.max(laws, function(d){return parseInt(d.lawtotal) })])
             .range([height, 0]);
         svg2.append('g')
             .attr('class', 'y-axis')
@@ -88,15 +105,27 @@ export function FirearmLaws(container) {
         svg2.select('.y-axis-title')
             .text('number of gun laws');
 
+        console.log(laws);
+
+        svg2.append('text')
+            .attr('class', 'firearms-laws-title')
+            .attr('x', width/2 - 20)
+            .attr('y', -20)
+            .text('Number of Gun Laws in: ' + laws[0].state);
+
         let line = d3.line()
             .x(function(d) {return xScale(d.year)})
             .y(function(d) {return yScale(d.lawtotal)})
 
         svg2.append('path')
-            .datum(filtered)
+            .datum(laws)
             .attr('fill', 'none')
             .attr('stroke', 'steelblue')
             .attr('stroke-width', 2)
             .attr('d', line);
     }
+
+    return {
+        update
+    };
 }
