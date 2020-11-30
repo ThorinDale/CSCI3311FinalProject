@@ -19,12 +19,6 @@ export function FirearmLaws(container) {
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-    
-    svg1.append('text')
-        .text("Number of Gun Laws by State over Time")
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('class', 'display-4');
 
     Promise.all([
         d3.json('./firearmLaws/states-10m.json'),
