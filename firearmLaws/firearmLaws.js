@@ -26,7 +26,7 @@ export function FirearmLaws(container) {
     ]).then(data => {
         let map = data[0];
         let laws = data[1];
-        console.log(map);
+        console.log(laws);
 
         const width = 1000 - margin.left - margin.right;
         const height = 430 - margin.top - margin.bottom;
@@ -50,19 +50,30 @@ export function FirearmLaws(container) {
         
         const tooltip = svg1.append('text')
         tooltip.attr('class', 'stateLabel');
+
+        let fillData = laws.filter(law => law.state == "Massachusetts");
+        update(fillData);
         
         d3.selectAll('.state')
             .on('mouseover', function(event, d) {
-                d3.select(d.path)
-                    .attr('fill', '##3393FF');
+                console.log(event.target);
+                d3.select(event.target)
+                    .style('fill', '336EFF');
                 let stateLabel = d.properties.name;
                 d3.select('.stateLabel')
                     .attr('x', 100)
                     .attr('y', 200)
                     .text(stateLabel);
+                let filteredLaws = laws.filter(law => law.state == stateLabel);
+                update(filteredLaws);
+                
             })
-            .on('click', function(d, i) {
-                let state = i.properties.name;
+            .on('mouseout', function(event, d) {
+                d3.select(event.target)
+                    .style('fill', '#e3e3e3');
+            })
+            .on('click', function(event, d) {
+                let state = d.properties.name;
                 let filteredLaws = laws.filter(law => law.state == state);
                 update(filteredLaws);
             });
